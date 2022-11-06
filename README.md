@@ -49,7 +49,7 @@ Run locally for dev, requirements mostly originate from [yolov5](https://github.
 - `python3 -m venv venv`
 - `source venv/bin/activate`
 - `(venv) $ pip install -r requirements.txt`
-- `(venv) $ python3 restapi.py --port 8080`
+- `(venv) $ python3 webapp.py --port 8080`
 
 An example python script to perform inference using [requests](https://docs.python-requests.org/en/master/) is given in `tests/test_request.py`
 

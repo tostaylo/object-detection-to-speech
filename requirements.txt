@@ -21,3 +21,7 @@ pyttsx3
 ipython  # interactive notebook
 psutil  # system utilization
 thop>=0.1.1  # FLOPs computation
+
+
+# Detectron
+git+https://github.com/facebookresearch/detectron2.git
