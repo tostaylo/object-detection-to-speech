@@ -48,6 +48,14 @@ def get_detectron_predictor():
 
     return predictor
 
+def handle_file(request):
+  if "file" not in request.files:
+    return redirect(request.url)
+  file = request.files["file"]
+  if not file:
+      return
+  
+  return file
 
 @app.route('/', methods=['GET'])
 def index():
@@ -55,11 +63,7 @@ def index():
 
 @app.route('/detectron' , methods = ['POST'])
 def predict_detectron():
-  if "file" not in request.files:
-    return redirect(request.url)
-  file = request.files["file"]
-  if not file:
-      return
+  file = handle_file(request)
 
   img_bytes = file.read()
   img = Image.open(io.BytesIO(img_bytes))
@@ -88,11 +92,7 @@ def predict_detectron():
 
 @app.route("/yolo", methods=["POST"])
 def predict_yolo():
-    if "file" not in request.files:
-        return redirect(request.url)
-    file = request.files["file"]
-    if not file:
-        return
+    file = handle_file(request)
 
     img_bytes = file.read()
     img = Image.open(io.BytesIO(img_bytes))
