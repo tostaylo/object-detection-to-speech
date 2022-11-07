@@ -34,64 +34,89 @@ app = Flask(__name__)
 
 enable_detectron = False
 
-@app.route("/", methods=["GET", "POST"])
-def predict():
-    if request.method == "POST":
-        if "file" not in request.files:
-            return redirect(request.url)
-        file = request.files["file"]
-        if not file:
-            return
-       
-        img_bytes = file.read()
-        img = Image.open(io.BytesIO(img_bytes))
-    
-        image_directory = 'temp_images'
-        image_path = f'{image_directory}/image.jpg'
-        isDirectory = os.path.exists(image_directory)
-        if (not isDirectory):
-          os.mkdir(image_directory)
-      
-        img.save(image_path)
-      
-        # Detectron
-        if(enable_detectron):
-          cfg = get_cfg()
+def get_detectron_predictor():
+    cfg = get_cfg()
           
-          # add project-specific config (e.g., TensorMask) here if you're not running a model in detectron2's core library
-          cfg.MODEL.DEVICE = 'cpu'
-          cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
-          cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5  # set threshold for this model
-          # Find a model from detectron2's model zoo. You can use the https://dl.fbaipublicfiles... url as well
-          cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
+    # add project-specific config (e.g., TensorMask) here if you're not running a model in detectron2's core library
+    cfg.MODEL.DEVICE = 'cpu'
+    cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5  # set threshold for this model
+    # Find a model from detectron2's model zoo. You can use the https://dl.fbaipublicfiles... url as well
+    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
 
-          predictor = DefaultPredictor(cfg)
-          im = cv2.imread(image_path)
-          outputs = predictor(im)
+    predictor = DefaultPredictor(cfg)
 
-          prediction_classes = outputs['instances'].pred_classes.cpu().tolist()
-          predicted_categories = list(map(lambda category_id: categories[category_id + 1], prediction_classes  ))
+    return predictor
+
+
+@app.route('/', methods=['GET'])
+def index():
+  return render_template("index.html")
+
+@app.route('/detectron' , methods = ['POST'])
+def predict_detectron():
+  if "file" not in request.files:
+    return redirect(request.url)
+  file = request.files["file"]
+  if not file:
+      return
+
+  img_bytes = file.read()
+  img = Image.open(io.BytesIO(img_bytes))
+
+  image_directory = 'temp_images'
+  image_path = f'{image_directory}/image.jpg'
+  isDirectory = os.path.exists(image_directory)
+
+  if (not isDirectory):
+    os.mkdir(image_directory)
+
+  img.save(image_path)
+  im = cv2.imread(image_path)
+  predictor = get_detectron_predictor()
+  outputs = predictor(im)
+
+  prediction_classes = outputs['instances'].pred_classes.cpu().tolist()
+  predicted_categories = list(map(lambda category_id: categories[category_id + 1], prediction_classes  ))
+
+  print(predicted_categories[0])
+  speech_engine.save_to_file(predicted_categories[0], 'detectron-prediction.mp3')
+  speech_engine.runAndWait()
+
+  return predicted_categories[0]
+
+
+@app.route("/yolo", methods=["POST"])
+def predict_yolo():
+    if "file" not in request.files:
+        return redirect(request.url)
+    file = request.files["file"]
+    if not file:
+        return
+
+    img_bytes = file.read()
+    img = Image.open(io.BytesIO(img_bytes))
+
+    image_directory = 'temp_images'
+    image_path = f'{image_directory}/image.jpg'
+    isDirectory = os.path.exists(image_directory)
+    if (not isDirectory):
+      os.mkdir(image_directory)
+  
+    img.save(image_path)
+  
+    results = model([img])
+
+    results.render()  # updates results.imgs with boxes and labels
+    # results.save(save_dir="static/")
     
-          print(predicted_categories[0])
-          speech_engine.save_to_file(predicted_categories[0], 'detectron-prediction.mp3')
-          speech_engine.runAndWait()
-
-          return predicted_categories[0]
-
-        results = model([img])
-
-        results.render()  # updates results.imgs with boxes and labels
-        # results.save(save_dir="static/")
-        
-        df_json = results.pandas().xyxy[0].to_json(orient="records") 
-        prediction_to_text = json.loads(df_json)[0]['name']
-      
-        speech_engine.save_to_file(prediction_to_text, 'yolo5-prediction.mp3')
-        speech_engine.runAndWait()
-      
-        return prediction_to_text
-
-    return render_template("index.html")
+    df_json = results.pandas().xyxy[0].to_json(orient="records") 
+    prediction_to_text = json.loads(df_json)[0]['name']
+  
+    speech_engine.save_to_file(prediction_to_text, 'yolo5-prediction.mp3')
+    speech_engine.runAndWait()
+  
+    return prediction_to_text
 
 
 if __name__ == "__main__":
