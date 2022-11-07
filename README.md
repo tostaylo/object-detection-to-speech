@@ -9,6 +9,8 @@ Run locally for dev, requirements mostly originate from [yolov5](https://github.
 - `(venv) $ pip install -r requirements.txt`
 - `(venv) $ python3 webapp.py --port 8080`
 
+then visit http://localhost:8080/ in your browser:
+
 An example python script to perform inference using [requests](https://docs.python-requests.org/en/master/) is given in `tests/test_request.py`
 
 ## Web app
@@ -61,9 +63,9 @@ The example dockerfile shows how to expose the rest API:
 
 ```
 # Build
-docker build -t yolov5-flask .
+docker build -t object-detection .
 # Run
-docker run -p 8080:8080 yolov5-flask:latest
+ docker run -e PYTHONUNBUFFERED=1 -p  8080:8080 object-detection:latest
 ```
 
 ## reference

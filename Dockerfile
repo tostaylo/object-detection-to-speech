@@ -1,8 +1,15 @@
 FROM python:3.8-slim-buster
 
 RUN apt-get update
-RUN apt-get install ffmpeg libsm6 libxext6  -y
-RUN apt-get update -y && apt-get install -y gcc
+
+#https://github.com/facebookresearch/detectron2/issues/667
+RUN apt-get install ffmpeg libsm6 libxext6 gcc git g++ -y
+
+RUN pip3 install torch
+
+# text to speech library dependency
+# https://stackoverflow.com/questions/73873102/running-pyttsx3-espeak-text-to-speech-in-docker-container-creates-awful-sound
+RUN apt-get install -y espeak
 
 WORKDIR /app
 ADD . /app

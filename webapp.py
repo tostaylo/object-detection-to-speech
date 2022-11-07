@@ -36,7 +36,7 @@ def predict_detectron():
   image_directory = 'temp_images'
   image_path = f'{image_directory}/image.jpg'
   isDirectory = os.path.exists(image_directory)
-
+  
   if (not isDirectory):
     os.mkdir(image_directory)
 
@@ -44,15 +44,16 @@ def predict_detectron():
   im = cv2.imread(image_path)
 
   outputs = detectron_predictor(im)
-
+  
   prediction_classes = outputs['instances'].pred_classes.cpu().tolist()
   predicted_categories = list(map(lambda category_id: categories[category_id + 1], prediction_classes  ))
+  first_prediction = predicted_categories[0]
 
-  print(predicted_categories[0])
-  speech_engine.save_to_file(predicted_categories[0], 'detectron-prediction.mp3')
+  speech_engine = pyttsx3.init()
+  speech_engine.save_to_file(first_prediction, 'detectron-prediction.mp3')
   speech_engine.runAndWait()
 
-  return f'Detectron predicted the image contained a {predicted_categories[0]}. There was a .mp3 file created from the result.'
+  return f'Detectron predicted the image contained a {first_prediction}. There was a .mp3 file created from the result.'
 
 
 @app.route("/yolo", methods=["POST"])
@@ -62,19 +63,12 @@ def predict_yolo():
     img_bytes = file.read()
     img = Image.open(io.BytesIO(img_bytes))
 
-    image_directory = 'temp_images'
-    image_path = f'{image_directory}/image.jpg'
-    isDirectory = os.path.exists(image_directory)
-    if (not isDirectory):
-      os.mkdir(image_directory)
-  
-    img.save(image_path)
-  
     results = yolo_model([img])
     
     df_json = results.pandas().xyxy[0].to_json(orient="records") 
     prediction_to_text = json.loads(df_json)[0]['name']
   
+    speech_engine = pyttsx3.init()
     speech_engine.save_to_file(prediction_to_text, 'yolo5-prediction.mp3')
     speech_engine.runAndWait()
   
@@ -96,8 +90,5 @@ if __name__ == "__main__":
 
     #initialize detectron
     detectron_predictor = get_detectron_predictor()
-
-    #initalize text to speech
-    speech_engine = pyttsx3.init()
   
     app.run(host="0.0.0.0", port=args.port)  # debug=True causes Restarting with stat
