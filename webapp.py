@@ -32,7 +32,7 @@ from coco_classes import categories
 
 app = Flask(__name__)
 
-enable_detectron = True
+enable_detectron = False
 
 @app.route("/", methods=["GET", "POST"])
 def predict():
@@ -76,7 +76,7 @@ def predict():
           speech_engine.save_to_file(predicted_categories[0], 'detectron-prediction.mp3')
           speech_engine.runAndWait()
 
-          return 'Detectron complete'
+          return predicted_categories[0]
 
         results = model([img])
 
@@ -89,7 +89,7 @@ def predict():
         speech_engine.save_to_file(prediction_to_text, 'yolo5-prediction.mp3')
         speech_engine.runAndWait()
       
-        return "Yolo complete"
+        return prediction_to_text
 
     return render_template("index.html")
 
