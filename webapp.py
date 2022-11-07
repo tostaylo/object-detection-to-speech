@@ -86,9 +86,6 @@ def predict_yolo():
     img.save(image_path)
   
     results = yolo_model([img])
-
-    results.render()  # updates results.imgs with boxes and labels
-    # results.save(save_dir="static/")
     
     df_json = results.pandas().xyxy[0].to_json(orient="records") 
     prediction_to_text = json.loads(df_json)[0]['name']
