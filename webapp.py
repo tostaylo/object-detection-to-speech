@@ -16,7 +16,7 @@ from detectron2.utils.logger import setup_logger
 
 # Custom imports
 from coco_classes import categories
-from implement_detectron import get_detectron_predictor
+from detectron_init import get_detectron_predictor
 from helpers import handle_file, print_versions
 
 

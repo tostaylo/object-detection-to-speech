@@ -1,4 +1,3 @@
-# import some common detectron2 utilities
 from detectron2 import model_zoo
 from detectron2.engine import DefaultPredictor
 from detectron2.config import get_cfg
@@ -9,6 +8,7 @@ def get_detectron_predictor():
     cfg = get_cfg()
           
     # add project-specific config (e.g., TensorMask) here if you're not running a model in detectron2's core library
+    # https://github.com/facebookresearch/detectron2/issues/300
     cfg.MODEL.DEVICE = 'cpu'
     cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5  # set threshold for this model
