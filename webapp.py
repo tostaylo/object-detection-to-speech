@@ -21,32 +21,12 @@ setup_logger()
 import numpy as np
 import os, cv2, json
 
-# import some common detectron2 utilities
-from detectron2 import model_zoo
-from detectron2.engine import DefaultPredictor
-from detectron2.config import get_cfg
-# from detectron2.utils.visualizer import Visualizer
-# from detectron2.data import MetadataCatalog, DatasetCatalog
 
+# Custom imports
 from coco_classes import categories
+from implement_detectron import get_detectron_predictor
 
 app = Flask(__name__)
-
-enable_detectron = False
-
-def get_detectron_predictor():
-    cfg = get_cfg()
-          
-    # add project-specific config (e.g., TensorMask) here if you're not running a model in detectron2's core library
-    cfg.MODEL.DEVICE = 'cpu'
-    cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
-    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5  # set threshold for this model
-    # Find a model from detectron2's model zoo. You can use the https://dl.fbaipublicfiles... url as well
-    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
-
-    predictor = DefaultPredictor(cfg)
-
-    return predictor
 
 def handle_file(request):
   if "file" not in request.files:
@@ -77,8 +57,8 @@ def predict_detectron():
 
   img.save(image_path)
   im = cv2.imread(image_path)
-  predictor = get_detectron_predictor()
-  outputs = predictor(im)
+
+  outputs = detectron_predictor(im)
 
   prediction_classes = outputs['instances'].pred_classes.cpu().tolist()
   predicted_categories = list(map(lambda category_id: categories[category_id + 1], prediction_classes  ))
@@ -87,7 +67,7 @@ def predict_detectron():
   speech_engine.save_to_file(predicted_categories[0], 'detectron-prediction.mp3')
   speech_engine.runAndWait()
 
-  return predicted_categories[0]
+  return f'Detectron predicted the image contained a {predicted_categories[0]}. There was a .mp3 file created from the result.'
 
 
 @app.route("/yolo", methods=["POST"])
@@ -105,7 +85,7 @@ def predict_yolo():
   
     img.save(image_path)
   
-    results = model([img])
+    results = yolo_model([img])
 
     results.render()  # updates results.imgs with boxes and labels
     # results.save(save_dir="static/")
@@ -116,7 +96,7 @@ def predict_yolo():
     speech_engine.save_to_file(prediction_to_text, 'yolo5-prediction.mp3')
     speech_engine.runAndWait()
   
-    return prediction_to_text
+    return f'Yolo5 predicted the image contained a {prediction_to_text}. There was a .mp3 file created from the result.'
 
 
 if __name__ == "__main__":
@@ -124,9 +104,14 @@ if __name__ == "__main__":
     parser.add_argument("--port", default=8080, type=int, help="port number")
     args = parser.parse_args()
 
-    model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)  # force_reload = recache latest code
-    model.eval()
+    #initialize yolo
+    yolo_model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)  # force_reload = recache latest code
+    yolo_model.eval()
 
+    #initialize detectron
+    detectron_predictor = get_detectron_predictor()
+
+    #initalize speech to text
     speech_engine = pyttsx3.init()
   
     app.run(host="0.0.0.0", port=args.port)  # debug=True causes Restarting with stat
