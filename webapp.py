@@ -25,17 +25,9 @@ import os, cv2, json
 # Custom imports
 from coco_classes import categories
 from implement_detectron import get_detectron_predictor
+from helpers import handle_file
 
 app = Flask(__name__)
-
-def handle_file(request):
-  if "file" not in request.files:
-    return redirect(request.url)
-  file = request.files["file"]
-  if not file:
-      return
-  
-  return file
 
 @app.route('/', methods=['GET'])
 def index():
@@ -43,7 +35,7 @@ def index():
 
 @app.route('/detectron' , methods = ['POST'])
 def predict_detectron():
-  file = handle_file(request)
+  file = handle_file(request, redirect)
 
   img_bytes = file.read()
   img = Image.open(io.BytesIO(img_bytes))
@@ -72,7 +64,7 @@ def predict_detectron():
 
 @app.route("/yolo", methods=["POST"])
 def predict_yolo():
-    file = handle_file(request)
+    file = handle_file(request, redirect)
 
     img_bytes = file.read()
     img = Image.open(io.BytesIO(img_bytes))
