@@ -45,7 +45,14 @@ def predict():
        
         img_bytes = file.read()
         img = Image.open(io.BytesIO(img_bytes))
-        img.save('images/image.jpg')
+    
+        image_directory = 'temp_images'
+        image_path = f'{image_directory}/image.jpg'
+        isDirectory = os.path.exists(image_directory)
+        if (not isDirectory):
+          os.mkdir(image_directory)
+      
+        img.save(image_path)
       
         # Detectron
         if(enable_detectron):
@@ -59,15 +66,15 @@ def predict():
           cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
 
           predictor = DefaultPredictor(cfg)
-          im = cv2.imread('images/image.jpg')
+          im = cv2.imread(image_path)
           outputs = predictor(im)
 
           prediction_classes = outputs['instances'].pred_classes.cpu().tolist()
           predicted_categories = list(map(lambda category_id: categories[category_id + 1], prediction_classes  ))
     
           print(predicted_categories[0])
-          # speech_engine.save_to_file(predicted_categories[0], 'detectron-prediction.mp3')
-          # speech_engine.runAndWait()
+          speech_engine.save_to_file(predicted_categories[0], 'detectron-prediction.mp3')
+          speech_engine.runAndWait()
 
           return 'Detectron complete'
 
