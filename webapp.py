@@ -4,28 +4,21 @@ from PIL import Image
 import torch
 from flask import Flask, render_template, request, redirect
 import json
+import numpy as np
+import os, cv2, json
+
+# Text to Speech
 import pyttsx3
 
 # Detectron
 import detectron2
-# !nvcc --version
-TORCH_VERSION = ".".join(torch.__version__.split(".")[:2])
-CUDA_VERSION = torch.__version__.split("+")[-1]
-print("torch: ", TORCH_VERSION, "; cuda: ", CUDA_VERSION)
-print("detectron2:", detectron2.__version__)
-
 from detectron2.utils.logger import setup_logger
-setup_logger()
-
-# import some common libraries
-import numpy as np
-import os, cv2, json
-
 
 # Custom imports
 from coco_classes import categories
 from implement_detectron import get_detectron_predictor
-from helpers import handle_file
+from helpers import handle_file, print_versions
+
 
 app = Flask(__name__)
 
@@ -93,6 +86,10 @@ if __name__ == "__main__":
     parser.add_argument("--port", default=8080, type=int, help="port number")
     args = parser.parse_args()
 
+    print_versions(torch, detectron2)
+
+    setup_logger()
+
     #initialize yolo
     yolo_model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)  # force_reload = recache latest code
     yolo_model.eval()
@@ -100,7 +97,7 @@ if __name__ == "__main__":
     #initialize detectron
     detectron_predictor = get_detectron_predictor()
 
-    #initalize speech to text
+    #initalize text to speech
     speech_engine = pyttsx3.init()
   
     app.run(host="0.0.0.0", port=args.port)  # debug=True causes Restarting with stat
