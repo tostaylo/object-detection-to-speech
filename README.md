@@ -1,3 +1,16 @@
+# Object Detection API using Flask and Object Detection Libraries
+
+## Run & Develop locally
+
+Run locally for dev, requirements mostly originate from [yolov5](https://github.com/ultralytics/yolov5/blob/master/requirements.txt): and Detectron2
+
+- `python3 -m venv venv`
+- `source venv/bin/activate`
+- `(venv) $ pip install -r requirements.txt`
+- `(venv) $ python3 webapp.py --port 8080`
+
+An example python script to perform inference using [requests](https://docs.python-requests.org/en/master/) is given in `tests/test_request.py`
+
 ## Web app
 
 Simple app consisting of a form where you can upload an image, and see the inference result of the model in the browser. Run:
@@ -41,17 +54,6 @@ The model inference results are returned:
   'ymax': 717.0524902344,
   'ymin': 429.2020568848}]
 ```
-
-## Run & Develop locally
-
-Run locally for dev, requirements mostly originate from [yolov5](https://github.com/ultralytics/yolov5/blob/master/requirements.txt):
-
-- `python3 -m venv venv`
-- `source venv/bin/activate`
-- `(venv) $ pip install -r requirements.txt`
-- `(venv) $ python3 webapp.py --port 8080`
-
-An example python script to perform inference using [requests](https://docs.python-requests.org/en/master/) is given in `tests/test_request.py`
 
 ## Docker
 
