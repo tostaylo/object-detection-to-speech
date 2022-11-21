@@ -1,3 +1,6 @@
+## Necessary for building with linux architecture on M1 Mac
+## FROM --platform=linux/amd64 python:3.10-slim
+
 FROM python:3.10-slim
 
 RUN apt-get update
