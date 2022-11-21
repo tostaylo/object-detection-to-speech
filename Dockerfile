@@ -10,10 +10,6 @@ RUN apt-get install ffmpeg libsm6 libxext6 gcc git g++ -y
 
 RUN pip3 install torch
 
-# text to speech library dependency
-# https://stackoverflow.com/questions/73873102/running-pyttsx3-espeak-text-to-speech-in-docker-container-creates-awful-sound
-RUN apt-get install -y espeak
-
 ENV PYTHONUNBUFFERED True
 WORKDIR /app
 ADD . /app

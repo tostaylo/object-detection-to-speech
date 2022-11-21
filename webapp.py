@@ -8,9 +8,6 @@ import json
 import numpy as np
 import os, cv2, json
 
-# Text to Speech
-import pyttsx3
-
 # Detectron
 import detectron2
 from detectron2.utils.logger import setup_logger
@@ -57,11 +54,7 @@ def predict_detectron():
   predicted_categories = list(map(lambda category_id: categories[category_id + 1], prediction_classes  ))
   first_prediction = predicted_categories[0]
 
-  speech_engine = pyttsx3.init()
-  speech_engine.save_to_file(first_prediction, 'detectron-prediction.mp3')
-  speech_engine.runAndWait()
-
-  return f'Detectron predicted the image contained a {first_prediction}. There was a .mp3 file created from the result.'
+  return f'Detectron predicted the image contained a {first_prediction}.'
 
 
 @app.route("/yolo", methods=["POST"])
@@ -76,11 +69,7 @@ def predict_yolo():
     df_json = results.pandas().xyxy[0].to_json(orient="records") 
     prediction_to_text = json.loads(df_json)[0]['name']
   
-    speech_engine = pyttsx3.init()
-    speech_engine.save_to_file(prediction_to_text, 'yolo5-prediction.mp3')
-    speech_engine.runAndWait()
-  
-    return f'Yolo5 predicted the image contained a {prediction_to_text}. There was a .mp3 file created from the result.'
+    return f'Yolo5 predicted the image contained a {prediction_to_text}.'
 
 
 @app.route("/webcam", methods=["POST"])
@@ -96,7 +85,6 @@ def predict_from_webcam():
   df_json = results.pandas().xyxy[0].to_json(orient="records") 
   prediction_to_text = json.loads(df_json)[0]['name']
 
-  print(prediction_to_text)
   return jsonify(f'{prediction_to_text}')
 
 
