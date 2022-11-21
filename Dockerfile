@@ -1,4 +1,4 @@
-FROM python:3.8-slim-buster
+FROM python:3.10-slim
 
 RUN apt-get update
 
@@ -11,10 +11,11 @@ RUN pip3 install torch
 # https://stackoverflow.com/questions/73873102/running-pyttsx3-espeak-text-to-speech-in-docker-container-creates-awful-sound
 RUN apt-get install -y espeak
 
+ENV PYTHONUNBUFFERED True
 WORKDIR /app
 ADD . /app
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8080
 
-CMD ["python3", "webapp.py", "--port=8080"]
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 webapp:app

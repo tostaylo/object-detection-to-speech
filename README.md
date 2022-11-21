@@ -65,7 +65,7 @@ The example dockerfile shows how to expose the rest API:
 # Build
 docker build -t object-detection .
 # Run
- docker run -e PYTHONUNBUFFERED=1 -p  8080:8080 object-detection:latest
+ docker run -e PORT=8080 -p 8080:8080 object-detection:latest
 ```
 
 ## reference

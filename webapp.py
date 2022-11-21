@@ -23,6 +23,13 @@ from helpers import handle_file, print_versions
 
 app = Flask(__name__)
 
+ #initialize yolo
+yolo_model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)  # force_reload = recache latest code
+yolo_model.eval()
+
+#initialize detectron
+detectron_predictor = get_detectron_predictor()
+
 @app.route('/', methods=['GET'])
 def index():
   return render_template("index.html")
@@ -94,19 +101,12 @@ def predict_from_webcam():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Flask app exposing yolov5 models")
-    parser.add_argument("--port", default=8080, type=int, help="port number")
-    args = parser.parse_args()
+  parser = argparse.ArgumentParser(description="Flask app exposing yolov5 models")
+  parser.add_argument("--port", default=8080, type=int, help="port number")
+  args = parser.parse_args()
 
-    print_versions(torch, detectron2)
+  print_versions(torch, detectron2)
 
-    setup_logger()
+  setup_logger()
 
-    #initialize yolo
-    yolo_model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)  # force_reload = recache latest code
-    yolo_model.eval()
-
-    #initialize detectron
-    detectron_predictor = get_detectron_predictor()
-  
-    app.run(host="0.0.0.0", port=args.port)  # debug=True causes Restarting with stat
+  app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
