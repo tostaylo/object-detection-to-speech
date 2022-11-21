@@ -21,9 +21,11 @@
     <title>Object Detection</title>
   </head>
   <body class="text-center">
+   <button id="takePhoto">Take Photo</button>
+   <video id="video" controls muted autoplay></video>
+   <canvas id="canvas" width="200" height="200"></canvas>
 
     <form class="form-signin" action="/yolo" method=post enctype=multipart/form-data>
-        <img class="mb-4" src="/static/pytorch.png" alt="" width="72">
         <h1 class="h3 mb-3 font-weight-normal">Upload any image</h1>
         <input type="file" name="file" class="form-control-file" id="inputfile">
         <br/>
@@ -32,7 +34,6 @@
     </form>
 
    <form class="form-signin"action="/detectron"  method=post enctype=multipart/form-data>
-        <img class="mb-4" src="/static/pytorch.png" alt="" width="72">
         <h1 class="h3 mb-3 font-weight-normal">Upload any image</h1>
         <input type="file" name="file" class="form-control-file" id="inputfile">
         <br/>
@@ -59,5 +60,6 @@
           }
       });
     </script>
+    <script src="/static/index.js"></script>
   </body>
 </html>

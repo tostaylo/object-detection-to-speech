@@ -1,8 +1,9 @@
 import argparse
 import io
+import base64
 from PIL import Image
 import torch
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 import json
 import numpy as np
 import os, cv2, json
@@ -72,7 +73,24 @@ def predict_yolo():
     speech_engine.save_to_file(prediction_to_text, 'yolo5-prediction.mp3')
     speech_engine.runAndWait()
   
-    return f'Yolo5 predicted the image contained a {prediction_to_text}. There was a .mp3 file created from the result.'
+    return jsonify(f'Yolo5 predicted the image contained a {prediction_to_text}. There was a .mp3 file created from the result.')
+
+
+@app.route("/webcam", methods=["POST"])
+def predict_from_webcam():
+  base_64_img_json = request.get_json()
+  base64_image_str = base_64_img_json[base_64_img_json.find(",")+1:]
+  decoded = base64.decodebytes(bytes(base64_image_str, "utf-8"))
+
+  img = Image.open(io.BytesIO(decoded))
+
+  results = yolo_model([img])
+    
+  df_json = results.pandas().xyxy[0].to_json(orient="records") 
+  prediction_to_text = json.loads(df_json)[0]['name']
+
+  print(prediction_to_text)
+  return jsonify(f'{prediction_to_text}')
 
 
 if __name__ == "__main__":
