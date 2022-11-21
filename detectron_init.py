@@ -1,3 +1,5 @@
+import os, cv2
+
 from detectron2 import model_zoo
 from detectron2.engine import DefaultPredictor
 from detectron2.config import get_cfg
@@ -18,3 +20,22 @@ def get_detectron_predictor():
     predictor = DefaultPredictor(cfg)
 
     return predictor
+
+def get_detectron_prediction(predictor, img, categories):
+  image_directory = 'temp_images'
+  image_path = f'{image_directory}/image.jpg'
+  isDirectory = os.path.exists(image_directory)
+  
+  if (not isDirectory):
+    os.mkdir(image_directory)
+
+  img.save(image_path)
+  im = cv2.imread(image_path)
+
+  outputs = predictor(im)
+  
+  prediction_classes = outputs['instances'].pred_classes.cpu().tolist()
+  predicted_categories = list(map(lambda category_id: categories[category_id + 1], prediction_classes  ))
+  first_prediction = predicted_categories[0]
+  
+  return first_prediction

@@ -5,8 +5,7 @@ from PIL import Image
 import torch
 from flask import Flask, render_template, request, redirect, jsonify
 import json
-import numpy as np
-import os, cv2, json
+import os, json
 
 # Detectron
 import detectron2
@@ -14,7 +13,7 @@ from detectron2.utils.logger import setup_logger
 
 # Custom imports
 from coco_classes import categories
-from detectron_init import get_detectron_predictor
+from detectron_init import get_detectron_predictor, get_detectron_prediction
 from helpers import handle_file, print_versions
 
 
@@ -38,21 +37,7 @@ def predict_detectron():
   img_bytes = file.read()
   img = Image.open(io.BytesIO(img_bytes))
 
-  image_directory = 'temp_images'
-  image_path = f'{image_directory}/image.jpg'
-  isDirectory = os.path.exists(image_directory)
-  
-  if (not isDirectory):
-    os.mkdir(image_directory)
-
-  img.save(image_path)
-  im = cv2.imread(image_path)
-
-  outputs = detectron_predictor(im)
-  
-  prediction_classes = outputs['instances'].pred_classes.cpu().tolist()
-  predicted_categories = list(map(lambda category_id: categories[category_id + 1], prediction_classes  ))
-  first_prediction = predicted_categories[0]
+  first_prediction = get_detectron_prediction(detectron_predictor, img, categories)
 
   return f'Detectron predicted the image contained a {first_prediction}.'
 
