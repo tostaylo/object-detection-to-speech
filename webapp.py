@@ -73,7 +73,7 @@ def predict_yolo():
     speech_engine.save_to_file(prediction_to_text, 'yolo5-prediction.mp3')
     speech_engine.runAndWait()
   
-    return jsonify(f'Yolo5 predicted the image contained a {prediction_to_text}. There was a .mp3 file created from the result.')
+    return f'Yolo5 predicted the image contained a {prediction_to_text}. There was a .mp3 file created from the result.'
 
 
 @app.route("/webcam", methods=["POST"])
