@@ -11,11 +11,17 @@ then visit http://localhost:8080/ in your browser:
 
 ## Docker
 
+### with Docker Compose
+
+`docker-compose up --build`
+
+### or CLI commands
+
 ```sh
 # Build
-docker build -t object-detection .
+`docker build -t object-detection .`
 # Run
-docker run -e PORT=8080 -p 8080:8080 object-detection:latest
+`docker run -e PORT=8080 -p 8080:8080 object-detection:latest`
 
 ```
 
