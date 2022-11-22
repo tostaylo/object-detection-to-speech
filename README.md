@@ -20,6 +20,18 @@ docker run -e PORT=8080 -p 8080:8080 object-detection:latest
 
 then visit http://localhost:8080/ in your browser:
 
+### Test
+
+Good for testing models without restarting/relying on Flask server.
+
+1. Run Docker container using steps above
+2. In new command line window run
+
+```sh
+   docker container ls # (get running docker container name)
+   docker exec [running docker container name] python3 tests/[test file name]
+```
+
 ## Run & Develop with Local Python Environment (alternative to Docker)
 
 ```sh

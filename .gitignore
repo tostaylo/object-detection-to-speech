@@ -6,3 +6,4 @@ static/tmp.jpg
 *.pyc
 *.mp3
 temp_images
+.DS_Store
