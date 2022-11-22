@@ -1,28 +1,32 @@
 # Object Detection API using Flask and Object Detection Libraries
 
-## Run & Develop with Local Python Environment
-
-- `python3 -m venv venv`
-- `source venv/bin/activate`
-- `(venv) $ pip install -r requirements.txt`
-- `(venv) $ python3 webapp.py --port 8080`
-
-then visit http://localhost:8080/ in your browser:
-
-## Docker
+## Docker (preferred)
 
 ### with Docker Compose
 
-`docker-compose up --build`
+```sh
+docker-compose up --build
+```
 
 ### or CLI commands
 
 ```sh
 # Build
-`docker build -t object-detection .`
+docker build -t object-detection .
 # Run
-`docker run -e PORT=8080 -p 8080:8080 object-detection:latest`
+docker run -e PORT=8080 -p 8080:8080 object-detection:latest
 
+```
+
+then visit http://localhost:8080/ in your browser:
+
+## Run & Develop with Local Python Environment (alternative to Docker)
+
+```sh
+python3 -m venv venv
+source venv/bin/activate
+(venv) $ pip install -r requirements.txt
+(venv) $ python3 webapp.py --port 8080
 ```
 
 then visit http://localhost:8080/ in your browser:
