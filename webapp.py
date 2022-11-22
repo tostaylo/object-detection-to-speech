@@ -8,9 +8,9 @@ import json
 import os, json
 
 # Custom imports
-from coco_classes import categories
+from datasets import categories
 from ml_models.detectron import get_detectron_predictor, get_detectron_prediction
-from helpers import handle_file
+from requests import handle_file
 
 
 app = Flask(__name__)
