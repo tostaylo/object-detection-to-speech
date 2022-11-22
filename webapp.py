@@ -1,25 +1,19 @@
 import argparse
-import io
-import base64
-from PIL import Image
-import torch
 from flask import Flask, render_template, request, redirect, jsonify
-import json
-import os, json
+import os
 
 # Custom imports
 from datasets import categories
+from ml_models.yolo import get_yolo_predictions, get_yolo_model
 from ml_models.detectron import get_detectron_predictor, get_detectron_prediction
-from requests import handle_file
+from requests import handle_file, decode_base64_img
+from img import get_img_from_decoded, get_img_from_file
 
 
 app = Flask(__name__)
 
-#initialize yolo
-yolo_model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True) 
-yolo_model.eval()
 
-#initialize detectron
+yolo_model = get_yolo_model()
 detectron_predictor = get_detectron_predictor()
 
 @app.route('/', methods=['GET'])
@@ -28,45 +22,29 @@ def index():
 
 @app.route('/detectron' , methods = ['POST'])
 def predict_detectron():
-  file = handle_file(request, redirect)
-
-  img_bytes = file.read()
-  img = Image.open(io.BytesIO(img_bytes))
+  img = get_img_from_file(handle_file(request, redirect))
 
   first_prediction = get_detectron_prediction(detectron_predictor, img, categories)
 
   return f'Detectron predicted the image contained a {first_prediction}.'
 
-
 @app.route("/yolo", methods=["POST"])
 def predict_yolo():
-    file = handle_file(request, redirect)
+    img = get_img_from_file(handle_file(request, redirect))
 
-    img_bytes = file.read()
-    img = Image.open(io.BytesIO(img_bytes))
-
-    results = yolo_model([img])
+    prediction_to_text = get_yolo_predictions(yolo_model, img, 0)
     
-    df_json = results.pandas().xyxy[0].to_json(orient="records") 
-    prediction_to_text = json.loads(df_json)[0]['name']
-  
     return f'Yolo5 predicted the image contained a {prediction_to_text}.'
-
-
+  
 @app.route("/webcam", methods=["POST"])
 def predict_from_webcam():
-  base_64_img_json = request.get_json()
-  base64_image_str = base_64_img_json[base_64_img_json.find(",")+1:]
-  decoded = base64.decodebytes(bytes(base64_image_str, "utf-8"))
+  decoded = decode_base64_img(request.get_json())
+  img = get_img_from_decoded(decoded)
 
-  img = Image.open(io.BytesIO(decoded))
-
-  results = yolo_model([img])
-    
-  df_json = results.pandas().xyxy[0].to_json(orient="records") 
-  prediction_to_text = json.loads(df_json)[0]['name']
+  prediction_to_text = get_yolo_predictions(yolo_model, img, 0)
 
   return jsonify(f'{prediction_to_text}')
+
 
 
 if __name__ == "__main__":
