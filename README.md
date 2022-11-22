@@ -33,13 +33,12 @@ then visit http://localhost:8080/ in your browser:
 
 ## Google Cloud Run
 
-`gcloud services enable containerregistry.googleapis.com`
-
-`docker pull <docker-id>/<image-name>`
-
-`docker tag <docker-id>/<image-name> gcr.io/<project-id>/<image-name>`
-
-`docker push gcr.io/<project-id>/<image-name>`
+```sh
+gcloud services enable containerregistry.googleapis.com
+docker pull <docker-id>/<image-name>
+docker tag <docker-id>/<image-name> gcr.io/<project-id>/<image-name>
+docker push gcr.io/<project-id>/<image-name>
+```
 
 ## Reference
 
