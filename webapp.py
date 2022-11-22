@@ -7,20 +7,16 @@ from flask import Flask, render_template, request, redirect, jsonify
 import json
 import os, json
 
-# Detectron
-import detectron2
-from detectron2.utils.logger import setup_logger
-
 # Custom imports
 from coco_classes import categories
-from detectron_init import get_detectron_predictor, get_detectron_prediction
-from helpers import handle_file, print_versions
+from ml_models.detectron import get_detectron_predictor, get_detectron_prediction
+from helpers import handle_file
 
 
 app = Flask(__name__)
 
- #initialize yolo
-yolo_model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)  # force_reload = recache latest code
+#initialize yolo
+yolo_model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True) 
 yolo_model.eval()
 
 #initialize detectron
@@ -74,12 +70,8 @@ def predict_from_webcam():
 
 
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser(description="Flask app exposing yolov5 models")
+  parser = argparse.ArgumentParser(description="Flask app exposing ml models")
   parser.add_argument("--port", default=8080, type=int, help="port number")
   args = parser.parse_args()
-
-  print_versions(torch, detectron2)
-
-  setup_logger()
 
   app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
