@@ -1,18 +1,24 @@
 import os
 import io
-import torch
 from PIL import Image
 
+from datasets import categories
+from ml_models.yolo import get_yolo_predictions, get_yolo_model
+from ml_models.detectron import get_detectron_predictor, get_detectron_prediction
 
-model = torch.hub.load("ultralytics/yolov5", "yolov5s", pretrained=True, force_reload=True)
+
+yolo_model = get_yolo_model()
+detectron_predictor = get_detectron_predictor()
 
 working_directory = os.getcwd()
 file_path = working_directory + "/tests/images/person.jpg"
 
 with open(file_path, "rb") as file:
     img_bytes = file.read()
-img = Image.open(io.BytesIO(img_bytes))
+    img = Image.open(io.BytesIO(img_bytes))
 
-results = model(img, size=640)
+    yolo_prediction = get_yolo_predictions(yolo_model, img, 0)
+    detectron_prediction = get_detectron_prediction(detectron_predictor, img, categories)
 
-print(results.pandas().xyxy[0])
+    assert(yolo_prediction == 'person')
+    assert(detectron_prediction == 'person')

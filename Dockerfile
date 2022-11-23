@@ -13,6 +13,7 @@ RUN pip3 install torch
 ENV PYTHONUNBUFFERED True
 WORKDIR /app
 ADD . /app
+ENV PYTHONPATH /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8080
