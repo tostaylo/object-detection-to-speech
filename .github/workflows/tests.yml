@@ -1,0 +1,11 @@
+name: 'Tests'
+description: 'Test object detection model'
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  run: docker exec object-detection-web-1 python3 tests/test-model-inference.py
