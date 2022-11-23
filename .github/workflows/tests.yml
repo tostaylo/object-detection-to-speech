@@ -10,9 +10,7 @@ jobs:
   test-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Build docker image
-        run: docker-compose up --build
-      - name: run docker exec test
+      - uses: actions/checkout@v3
+      - uses: isbang/compose-action@v1.4.1
+      - name: Run docker exec test
         run: docker exec object-detection-web-1 python3 tests/test-model-inference.py
