@@ -1,4 +1,4 @@
-import base64, os, cv2
+import base64
 
 def handle_file(request, redirect):
   if "file" not in request.files:
@@ -14,17 +14,3 @@ def decode_base64_img(base_64_img_json):
   decoded = base64.decodebytes(bytes(base64_image_str, "utf-8"))
 
   return decoded
-
-def get_img_from_temp_directory(img):
-  # workaround function for being able to convert images to format needed by prediction models
-  image_directory = 'temp_images'
-  image_path = f'{image_directory}/image.jpg'
-  isDirectory = os.path.exists(image_directory)
-  
-  if (not isDirectory):
-    os.mkdir(image_directory)
-
-  img.save(image_path)
-  im = cv2.imread(image_path)
-
-  return im

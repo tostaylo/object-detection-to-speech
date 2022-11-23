@@ -5,7 +5,7 @@ from detectron2.utils.logger import setup_logger
 # from detectron2.utils.visualizer import Visualizer
 # from detectron2.data import MetadataCatalog, DatasetCatalog
 
-from file_helpers import get_img_from_temp_directory
+from img_helpers import get_img_from_temp_directory
 
 setup_logger()
 

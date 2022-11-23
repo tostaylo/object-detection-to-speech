@@ -14,9 +14,14 @@
 			<canvas width="350" height="280" id="canvas"></canvas>
 		</div>
 
+		{% if model.img_upload_prediction %}
+		<h2>{{model.img_upload_prediction.message}} was predicted by {{model.img_upload_prediction.predictor}}</h2>
+		{% endif %}
+
+		<h3>Upload an image for object detection</h3>
 		<div class="forms-container">
 			<form action="/yolo" method="post" enctype="multipart/form-data">
-				<h2>Yolo5</h2>
+				<h4>Yolo5</h4>
 				<div class="form-buttons">
 					<input type="file" name="file" id="inputfile" />
 					<button type="submit">Upload</button>
@@ -24,7 +29,7 @@
 			</form>
 
 			<form action="/detectron" method="post" enctype="multipart/form-data">
-				<h2>Detectron</h2>
+				<h4>Detectron2</h4>
 				<div class="form-buttons">
 					<input type="file" name="file" id="inputfile" />
 					<button type="submit">Upload</button>
