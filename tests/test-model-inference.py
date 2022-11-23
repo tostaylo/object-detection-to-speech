@@ -19,7 +19,6 @@ with open(file_path, "rb") as file:
 
     yolo_prediction = get_yolo_predictions(yolo_model, img, 0)
     detectron_prediction = get_detectron_prediction(detectron_predictor, img, categories)
-    print('hi')
-    print(detectron_prediction)
-    assert(yolo_prediction == 'persons')
+
+    assert(yolo_prediction == 'person')
     assert(detectron_prediction == 'person')
