@@ -13,4 +13,4 @@ jobs:
       - uses: actions/checkout@v3
       - uses: isbang/compose-action@v1.4.1
       - name: Run docker exec test
-        run: docker exec object-detection-web-1 python3 tests/test-model-inference.py
+        run: docker exec object-detection-container python3 tests/test-model-inference.py

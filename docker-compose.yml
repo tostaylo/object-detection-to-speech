@@ -1,3 +1,4 @@
+name: object-detection-container
 services:
   web:
     build: .
