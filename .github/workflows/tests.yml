@@ -5,7 +5,12 @@ on:
   push:
     branches:
       - main
-runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  run: docker exec object-detection-web-1 python3 tests/test-model-inference.py
+jobs:
+  container-test-job:
+    runs-on: ubuntu-latest
+    runs:
+      using: 'docker'
+      image: 'Dockerfile'
+    steps:
+      - name: run docker exec
+        run: docker exec object-detection-web-1 python3 tests/test-model-inference.py
