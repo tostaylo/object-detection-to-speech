@@ -6,7 +6,7 @@ import os
 from datasets import categories
 from ml_models.yolo import get_yolo_predictions, get_yolo_model
 from ml_models.detectron import get_detectron_predictor, get_detectron_prediction
-from requests import handle_file, decode_base64_img
+from file_helpers import handle_file, decode_base64_img
 from img import get_img_from_decoded, get_img_from_file
 
 
@@ -32,9 +32,9 @@ def predict_detectron():
 def predict_yolo():
     img = get_img_from_file(handle_file(request, redirect))
 
-    prediction_to_text = get_yolo_predictions(yolo_model, img, 0)
+    first_prediction = get_yolo_predictions(yolo_model, img, 0)
     
-    return f'Yolo5 predicted the image contained a {prediction_to_text}.'
+    return f'Yolo5 predicted the image contained a {first_prediction}.'
   
 @app.route("/webcam", methods=["POST"])
 def predict_from_webcam():
