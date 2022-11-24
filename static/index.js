@@ -29,6 +29,11 @@ function sayPrediction(prediction) {
 	synth.speak(utterance);
 }
 
+function removePreviousPrediction() {
+	const predictionMessageContainer = document.querySelector('.prediction-message-container');
+	predictionMessageContainer.innerHTML = '';
+}
+
 async function takePhotoAndSayPrediction() {
 	const imgDataUrl = await getImageDataUrl();
 
@@ -44,8 +49,26 @@ async function takePhotoAndSayPrediction() {
 	const prediction = await predictionResponse.json();
 
 	sayPrediction(prediction);
+	removePreviousPrediction();
 }
 
-startVideo();
+function sayPredictionFromElement(predictionElement) {
+	console.log('preditction,', predictionElement);
+	if (!predictionElement) return;
 
-takePhotoEl.addEventListener('click', takePhotoAndSayPrediction);
+	setTimeout(() => sayPrediction(predictionElement.textContent), 1000);
+}
+
+const predictionElement = document.querySelector('#prediction');
+
+function addEventListeners() {
+	takePhotoEl.addEventListener('click', takePhotoAndSayPrediction);
+}
+
+function init() {
+	startVideo();
+	addEventListeners();
+	sayPredictionFromElement(predictionElement);
+}
+
+init();

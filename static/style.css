@@ -4,6 +4,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 h1,
@@ -12,10 +13,32 @@ h3 {
 	text-align: center;
 }
 
+a {
+	padding: 5px;
+	color: #e99eb7;
+}
+
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #585b63;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	background: #121212;
+	padding: 0 30px;
+}
+
+header > a {
+	text-decoration: none;
+	color: white;
+}
+
 button,
 input {
 	display: inline-block;
-	max-height: 70px;
 	margin: 5px;
 	outline: none;
 	cursor: pointer;
@@ -37,15 +60,39 @@ input {
 	justify-content: space-between;
 }
 
-.video-container {
-	margin-bottom: 200px;
-}
-
 .video-container,
 .forms-container {
 	display: flex;
 	width: 100%;
 	justify-content: space-evenly;
 	align-items: center;
-	height: 40vh;
+	flex-direction: column;
+	margin-bottom: 50px;
+}
+
+.video-container {
+	margin-top: 150px;
+}
+
+.video-container > * {
+	flex: 1;
+	width: 40%;
+}
+
+.forms-container {
+	height: 200px;
+}
+
+.prediction-message-container {
+	height: 50px;
+	display: flex;
+	justify-content: center;
+}
+
+.prediction {
+	margin: 0 15px;
+	margin-top: -15px;
+	font-size: 40px;
+	color: #bfc3cd;
+	font-style: oblique;
 }

@@ -8,20 +8,29 @@
 		<title>Object Detection</title>
 	</head>
 	<body>
-		<div class="video-container">
-			<video width="350" height="280" id="video" controls muted autoplay></video>
+		<header>
+			<a href="/"><h1>Object Detection to Speech</h1></a>
+			<nav>
+				<a href="#video-container">Take Photo</a>
+				<a href="#forms-container">Upload Photo</a>
+			</nav>
+		</header>
+		<div id="video-container" class="video-container">
+			<video id="video" controls muted autoplay></video>
 			<button id="takePhoto">Take Photo for Object Detection</button>
-			<canvas width="350" height="280" id="canvas"></canvas>
+			<canvas id="canvas"></canvas>
 		</div>
 
-		{% if model.img_upload_prediction %}
-		<h2>{{model.img_upload_prediction.message}} was predicted by {{model.img_upload_prediction.predictor}}</h2>
-		{% endif %}
+		<h2 class="prediction-message-container">
+			{% if model.img_upload_prediction %} A
+			<span class="prediction" id="prediction">{{model.img_upload_prediction.message}} </span> was predicted by
+			<span class="prediction">{{model.img_upload_prediction.predictor}}</span> {% endif %}
+		</h2>
 
-		<h3>Upload an image for object detection</h3>
-		<div class="forms-container">
+		<h3>Or Upload an Image for Object Detection</h3>
+		<div id="forms-container" class="forms-container">
 			<form action="/yolo" method="post" enctype="multipart/form-data">
-				<labe for="image-file-detectron2">Yolo5</label>
+				<label for="image-file-yolo">Yolo5</label>
 				<div class="form-buttons">
 					<input type="file" name="file" id="image-file-yolo" />
 					<button type="submit">Upload</button>
@@ -29,7 +38,7 @@
 			</form>
 
 			<form action="/detectron" method="post" enctype="multipart/form-data">
-				<label for="image-file-detectron2">Detectron2</label>
+				<label for="image-file-detectron">Detectron2</label>
 				<div class="form-buttons">
 					<input class="file-input" type="file" name="file" id="image-file-detectron" />
 					<button type="submit">Upload</button>
