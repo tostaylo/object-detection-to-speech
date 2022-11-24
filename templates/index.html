@@ -23,8 +23,9 @@
 
 		<h2 class="prediction-message-container">
 			{% if model.img_upload_prediction %} A
-			<span class="prediction" id="prediction">{{model.img_upload_prediction.message}} </span> was predicted by
-			<span class="prediction">{{model.img_upload_prediction.predictor}}</span> {% endif %}
+			<span class="prediction" id="prediction">{{model.img_upload_prediction.message}} </span>
+			with confidence of <span class="prediction">{{model.img_upload_prediction.confidence}}</span> percent, was
+			predicted by <span class="prediction">{{model.img_upload_prediction.predictor}}</span> {% endif %}
 		</h2>
 
 		<h3>Or Upload an Image for Object Detection</h3>

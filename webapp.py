@@ -24,9 +24,9 @@ def index():
 def predict_detectron():
   img = get_img_from_file(handle_file(request, redirect))
 
-  first_prediction = get_detectron_prediction(detectron_predictor, img, categories)
+  prediction_name, confidence = get_detectron_prediction(detectron_predictor, img, categories)
 
-  model = {'img_upload_prediction':{'message': first_prediction, 'predictor': "Detectron2"}}
+  model = {'img_upload_prediction':{'message': prediction_name, 'predictor': "Detectron2", "confidence": confidence}}
 
   return render_template("index.html", model=model)
 
@@ -34,9 +34,9 @@ def predict_detectron():
 def predict_yolo():
   img = get_img_from_file(handle_file(request, redirect))
 
-  first_prediction = get_yolo_predictions(yolo_model, img, 0)
+  prediction_name, confidence = get_yolo_predictions(yolo_model, img, 0)
 
-  model = {'img_upload_prediction': {'message':first_prediction, 'predictor': "Yolov5"}}
+  model = {'img_upload_prediction': {'message': prediction_name, 'predictor': "Yolov5", "confidence": confidence}}
     
   return render_template("index.html", model=model)
   
@@ -45,9 +45,9 @@ def predict_from_webcam():
   decoded = decode_base64_img(request.get_json())
   img = get_img_from_decoded(decoded)
 
-  prediction_to_text = get_yolo_predictions(yolo_model, img, 0)
+  prediction_name, confidence = get_yolo_predictions(yolo_model, img, 0)
 
-  return jsonify(f'{prediction_to_text}')
+  return jsonify(f'{prediction_name} with confidence of {confidence} percent')
 
 
 

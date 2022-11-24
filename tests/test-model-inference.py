@@ -17,8 +17,10 @@ with open(file_path, "rb") as file:
     img_bytes = file.read()
     img = Image.open(io.BytesIO(img_bytes))
 
-    yolo_prediction = get_yolo_predictions(yolo_model, img, 0)
-    detectron_prediction = get_detectron_prediction(detectron_predictor, img, categories)
+    yolo_prediction, yolo_confidence = get_yolo_predictions(yolo_model, img, 0)
+    detectron_prediction, detectron_confidence = get_detectron_prediction(detectron_predictor, img, categories)
 
     assert(yolo_prediction == 'person')
     assert(detectron_prediction == 'person')
+    assert(detectron_confidence > 0)
+    assert(yolo_confidence > 0)

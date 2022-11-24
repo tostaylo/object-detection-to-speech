@@ -27,9 +27,12 @@ def get_detectron_predictor():
 def get_detectron_prediction(predictor, img, categories):
   im = get_img_from_temp_directory(img)
   outputs = predictor(im)
-  
-  prediction_classes = outputs['instances'].pred_classes.cpu().tolist()
+  instances = outputs['instances']
+  scores = instances.scores.cpu().tolist()
+  prediction_classes = instances.pred_classes.cpu().tolist()
   predicted_categories = list(map(lambda category_id: categories[category_id + 1], prediction_classes  ))
   first_prediction = predicted_categories[0]
-  
-  return first_prediction
+  first_score = scores[0]
+  first_score_to_percent = round(first_score * 100, 2) 
+
+  return (first_prediction, first_score_to_percent)
