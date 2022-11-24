@@ -6,8 +6,8 @@ import os
 from datasets import categories
 from ml_models.yolo import get_yolo_predictions, get_yolo_model
 from ml_models.detectron import get_detectron_predictor, get_detectron_prediction
-from file_helpers import handle_file, decode_base64_img
-from img_helpers import get_img_from_decoded, get_img_from_file
+from helpers.files import handle_file, decode_base64_img
+from helpers.images import get_img_from_decoded, get_img_from_file
 
 
 app = Flask(__name__)
