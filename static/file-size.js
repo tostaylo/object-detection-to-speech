@@ -1,14 +1,20 @@
-$('#inputfile').bind('change', function () {
-	let fileSize = this.files[0].size / 1024 / 1024; // this gives in MB
+function handleFile(event) {
+	if (!event.target.files.length) return;
+
+	const fileSize = event.target.files[0].size / 1024 / 1024; // MB
 	if (fileSize > 1) {
-		$('#inputfile').val(null);
-		alert('file is too big. images more than 1MB are not allowed');
+		event.target.value = null;
+		window.alert('This file is too large. Images more than 1MB are not allowed.');
 		return;
 	}
 
-	let ext = $('#inputfile').val().split('.').pop().toLowerCase();
-	if ($.inArray(ext, ['jpg', 'jpeg']) == -1) {
-		$('#inputfile').val(null);
-		alert('only jpeg/jpg files are allowed!');
+	const ext = event.target.value.split('.').pop().toLowerCase();
+
+	if (!['jpg', 'jpeg'].includes(ext)) {
+		event.target.value = null;
+		window.alert('Only jpeg/jpg files are allowed.');
 	}
-});
+}
+
+document.getElementById('image-file-detectron').addEventListener('change', handleFile);
+document.getElementById('image-file-yolo').addEventListener('change', handleFile);
