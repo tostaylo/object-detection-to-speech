@@ -30,6 +30,10 @@ def get_detectron_prediction(predictor, img, categories):
   instances = outputs['instances']
   scores = instances.scores.cpu().tolist()
   prediction_classes = instances.pred_classes.cpu().tolist()
+  
+  if (len(scores)== 0 or len(prediction_classes) == 0):
+    return ('no prediction', 0)
+
   predicted_categories = list(map(lambda category_id: categories[category_id + 1], prediction_classes  ))
   first_prediction = predicted_categories[0]
   first_score = scores[0]
