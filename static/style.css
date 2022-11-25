@@ -7,6 +7,10 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+h1 {
+	font-size: 20px;
+}
+
 h1,
 h2,
 h3 {
@@ -36,6 +40,10 @@ header > a {
 	color: white;
 }
 
+nav {
+	display: flex;
+}
+
 button,
 input {
 	display: inline-block;
@@ -54,10 +62,14 @@ input {
 	color: #fff;
 }
 
+form {
+	width: 100%;
+}
+
 .form-buttons {
 	display: flex;
 	width: 100%;
-	justify-content: space-between;
+	justify-content: center;
 }
 
 .video-container,
@@ -67,7 +79,6 @@ input {
 	justify-content: space-evenly;
 	align-items: center;
 	flex-direction: column;
-	margin-bottom: 50px;
 }
 
 .video-container {
@@ -76,23 +87,44 @@ input {
 
 .video-container > * {
 	flex: 1;
-	width: 40%;
+	width: 100%;
 }
 
 .forms-container {
 	height: 200px;
+	margin-bottom: 50px;
 }
 
 .prediction-message-container {
-	height: 50px;
 	display: flex;
 	justify-content: center;
+	flex-direction: column;
+	margin: 50px 0;
+	border-bottom: 1px solid #585b63;
+	border-top: 1px solid #585b63;
+	padding: 15px 0;
 }
 
 .prediction {
 	margin: 0 15px;
-	margin-top: -15px;
 	font-size: 40px;
 	color: #bfc3cd;
 	font-style: oblique;
+}
+
+@media screen and (min-width: 900px) {
+	.video-container > * {
+		width: 40%;
+	}
+
+	.prediction-message-container {
+		flex-direction: row;
+	}
+	.prediction {
+		margin-top: -15px;
+	}
+
+	form {
+		width: auto;
+	}
 }
