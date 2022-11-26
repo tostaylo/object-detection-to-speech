@@ -33,6 +33,13 @@ header {
 	right: 0;
 	background: #121212;
 	padding: 0 30px;
+	background: black;
+	overflow: hidden;
+	height: 100px;
+}
+
+header > a > img {
+	width: 200px;
 }
 
 header > a {
@@ -102,7 +109,7 @@ form {
 	margin: 50px 0;
 	border-bottom: 1px solid #585b63;
 	border-top: 1px solid #585b63;
-	padding: 15px 0;
+	padding: 30px 0;
 }
 
 .prediction {
