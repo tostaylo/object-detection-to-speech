@@ -45,6 +45,8 @@ then visit http://localhost:8080/ in your browser:
 
 ## Google Cloud Run
 
+[Live Web Application](https://object-detection-qq4ppihdsa-uc.a.run.app/)
+
 ```sh
 gcloud services enable containerregistry.googleapis.com
 docker pull <docker-id>/<image-name>
@@ -52,11 +54,13 @@ docker tag <docker-id>/<image-name> gcr.io/<project-id>/<image-name>
 docker push gcr.io/<project-id>/<image-name>
 ```
 
+## Architecture
+
+![architecture](./docs/images/architecture.png)
+
 ## Reference
 
 - https://github.com/ultralytics/yolov5
 - https://github.com/ultralytics/yolov5/issues/36
 - https://detectron2.readthedocs.io/en/latest/tutorials/getting_started.html
-- https://github.com/jzhang533/yolov5-flask
 - https://github.com/robmarkcole/yolov5-flask (this repo was forked from here)
-- https://github.com/avinassh/pytorch-flask-api-heroku
