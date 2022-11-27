@@ -1,6 +1,8 @@
 import argparse
 from flask import Flask, render_template, request, redirect, jsonify
 import os
+from gtts import gTTs
+import playsound
 
 # Custom imports
 from datasets import categories
@@ -15,6 +17,8 @@ app = Flask(__name__)
 
 yolo_model = get_yolo_model()
 detectron_predictor = get_detectron_predictor()
+caution_items = ['car', 'bus', 'traffic light', 'stop sign', 'knife']
+caution_switch = False
 
 @app.route('/', methods=['GET'])
 def index():
@@ -46,6 +50,16 @@ def predict_from_webcam():
   img = get_img_from_decoded(decoded)
 
   prediction_name, confidence = get_yolo_predictions(yolo_model, img, 0)
+
+  if caution_switch == True:
+    if prediction_name in caution_items:
+      tts = gTTs('caution')
+      tts.save('caution.mp3')
+      playsound.playsound('caution.mp3')
+
+
+
+
 
   return jsonify(f'{prediction_name} with confidence of {confidence} percent')
 
