@@ -97,6 +97,18 @@ form {
 	width: 100%;
 }
 
+label[for='predictor-select'] {
+	width: 200px;
+	text-align: center;
+}
+
+.video-container > select {
+	margin-top: 10px;
+	margin-bottom: 30px;
+	width: 100px;
+	height: 100px;
+}
+
 .forms-container {
 	height: 200px;
 	margin-bottom: 50px;

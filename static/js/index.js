@@ -34,10 +34,16 @@ function removePreviousPrediction() {
 	predictionMessageContainer.innerHTML = '';
 }
 
+function getObjectDetectorParam() {
+	const selectEl = document.getElementById('predictor-select');
+	return selectEl.value;
+}
+
 async function takePhotoAndSayPrediction() {
 	const imgDataUrl = await getImageDataUrl();
+	const url = `/webcam?${getObjectDetectorParam()}`;
 
-	const predictionResponse = await fetch('/webcam', {
+	const predictionResponse = await fetch(url, {
 		method: 'POST',
 		headers: {
 			Accept: 'application/json',
@@ -53,7 +59,6 @@ async function takePhotoAndSayPrediction() {
 }
 
 function sayPredictionFromElement(predictionElement) {
-	console.log('preditction,', predictionElement);
 	if (!predictionElement) return;
 
 	setTimeout(() => sayPrediction(predictionElement.textContent), 1000);
