@@ -16,6 +16,8 @@ app = Flask(__name__)
 yolo_model = get_yolo_model()
 detectron_predictor = get_detectron_predictor()
 
+model_switch = "yolo"
+
 @app.route('/', methods=['GET'])
 def index():
   return render_template("index.html", model={})
@@ -45,7 +47,11 @@ def predict_from_webcam():
   decoded = decode_base64_img(request.get_json())
   img = get_img_from_decoded(decoded)
 
-  prediction_name, confidence = get_yolo_predictions(yolo_model, img, 0)
+  if model_switch == "yolo":
+    prediction_name, confidence = get_yolo_predictions(yolo_model, img, 0)
+  else:
+    prediction_name, confidence = get_detectron_prediction(detectron_predictor, img, categories)
+
 
   return jsonify(f'{prediction_name} with confidence of {confidence} percent')
 
