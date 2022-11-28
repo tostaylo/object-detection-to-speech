@@ -1,5 +1,8 @@
 const video = document.querySelector('#video');
 const takePhotoEl = document.querySelector('#takePhoto');
+const autoCaptureCheckbox = document.querySelector('#autoCapture');
+const predictionElement = document.querySelector('#prediction');
+let intervalId;
 
 function startVideo() {
 	window.navigator.mediaDevices
@@ -53,16 +56,22 @@ async function takePhotoAndSayPrediction() {
 }
 
 function sayPredictionFromElement(predictionElement) {
-	console.log('preditction,', predictionElement);
 	if (!predictionElement) return;
 
 	setTimeout(() => sayPrediction(predictionElement.textContent), 1000);
 }
 
-const predictionElement = document.querySelector('#prediction');
+function autoCapture(event) {
+	if (event.target.checked) {
+		intervalId = window.setInterval(takePhotoAndSayPrediction, 4000);
+	} else {
+		clearInterval(intervalId);
+	}
+}
 
 function addEventListeners() {
 	takePhotoEl.addEventListener('click', takePhotoAndSayPrediction);
+	autoCaptureCheckbox.addEventListener('change', autoCapture);
 }
 
 function init() {
@@ -72,12 +81,3 @@ function init() {
 }
 
 init();
-let autoCaptureCheckbox = document.getElementById('autoCapture');
-let saveSettingsButton = document.getElementById('saveSettings');
-saveSettingsButton.onclick = () => {
-	if (autoCaptureCheckbox.checked){
-		intervalId = window.setInterval(takePhotoAndSayPrediction,4000);
-	} else {
-		clearInterval(intervalId);
-	}
-};
