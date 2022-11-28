@@ -16,6 +16,7 @@ app = Flask(__name__)
 yolo_model = get_yolo_model()
 detectron_predictor = get_detectron_predictor()
 
+
 @app.route('/', methods=['GET'])
 def index():
   return render_template("index.html", model={})
