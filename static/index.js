@@ -72,3 +72,12 @@ function init() {
 }
 
 init();
+let autoCaptureCheckbox = document.getElementById('autoCapture');
+let saveSettingsButton = document.getElementById('saveSettings');
+saveSettingsButton.onclick = () => {
+	if (autoCaptureCheckbox.checked){
+		intervalId = window.setInterval(takePhotoAndSayPrediction,4000);
+	} else {
+		clearInterval(intervalId);
+	}
+};

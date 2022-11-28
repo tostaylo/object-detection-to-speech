@@ -1,8 +1,6 @@
 import argparse
 from flask import Flask, render_template, request, redirect, jsonify
 import os
-import time
-import threading
 
 # Custom imports
 from datasets import categories
@@ -17,15 +15,6 @@ app = Flask(__name__)
 
 yolo_model = get_yolo_model()
 detectron_predictor = get_detectron_predictor()
-
-auto_switch = True
-
-# this function will automatically capture from webcam when auto_switch == True
-def auto():
-  while auto_switch == True:
-    print("test")
-    time.sleep(3)
-    predict_from_webcam()
 
 
 @app.route('/', methods=['GET'])
@@ -68,6 +57,4 @@ if __name__ == "__main__":
   parser.add_argument("--port", default=8080, type=int, help="port number")
   args = parser.parse_args()
 
-  auto_thread = threading.Thread(target=auto)
-  auto_thread.start()
   app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
