@@ -16,11 +16,12 @@
 			</nav>
 		</header>
 		<div id="video-container" class="video-container">
-			<label for="predictor-select">Select object detector</label>
+			<label for="predictor-select">Select Object Detector</label>
 			<select name="predictor-select" id="predictor-select">
 				<option value="detectron">Detectron2</option>
 				<option value="yolo">Yolo5</option>
 			</select>
+			<label for="autoCapture"><input type="checkbox" id="autoCapture" /> Auto Capture</label>
 			<video id="video" controls muted autoplay></video>
 			<button id="takePhoto">Detect Object</button>
 			<canvas id="canvas"></canvas>

@@ -16,7 +16,6 @@ app = Flask(__name__)
 yolo_model = get_yolo_model()
 detectron_predictor = get_detectron_predictor()
 
-model_switch = "yolo"
 
 @app.route('/', methods=['GET'])
 def index():

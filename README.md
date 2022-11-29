@@ -58,6 +58,9 @@ docker push gcr.io/<project-id>/<image-name>
 
 ![architecture](./docs/images/architecture.png)
 
+## Google Colab
+https://colab.research.google.com/drive/1dBh5onisO2XdNzwVmCosnYGTca_eFaVW?usp=sharing
+
 ## Reference
 
 - https://github.com/ultralytics/yolov5

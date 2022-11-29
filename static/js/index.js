@@ -1,5 +1,8 @@
 const video = document.querySelector('#video');
 const takePhotoEl = document.querySelector('#takePhoto');
+const autoCaptureCheckbox = document.querySelector('#autoCapture');
+const predictionElement = document.querySelector('#prediction');
+let intervalId;
 
 function startVideo() {
 	window.navigator.mediaDevices
@@ -41,7 +44,7 @@ function getObjectDetectorParam() {
 
 async function takePhotoAndSayPrediction() {
 	const imgDataUrl = await getImageDataUrl();
-	const url = `/webcam?${getObjectDetectorParam()}`;
+	const url = `/webcam?inference=${getObjectDetectorParam()}`;
 
 	const predictionResponse = await fetch(url, {
 		method: 'POST',
@@ -64,10 +67,17 @@ function sayPredictionFromElement(predictionElement) {
 	setTimeout(() => sayPrediction(predictionElement.textContent), 1000);
 }
 
-const predictionElement = document.querySelector('#prediction');
+function autoCapture(event) {
+	if (event.target.checked) {
+		intervalId = window.setInterval(takePhotoAndSayPrediction, 4000);
+	} else {
+		clearInterval(intervalId);
+	}
+}
 
 function addEventListeners() {
 	takePhotoEl.addEventListener('click', takePhotoAndSayPrediction);
+	autoCaptureCheckbox.addEventListener('change', autoCapture);
 }
 
 function init() {

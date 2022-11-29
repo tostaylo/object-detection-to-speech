@@ -54,7 +54,7 @@ nav {
 button,
 input {
 	display: inline-block;
-	margin: 5px;
+	margin: 10px;
 	outline: none;
 	cursor: pointer;
 	font-size: 16px;
