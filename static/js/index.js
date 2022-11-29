@@ -37,10 +37,16 @@ function removePreviousPrediction() {
 	predictionMessageContainer.innerHTML = '';
 }
 
+function getObjectDetectorParam() {
+	const selectEl = document.getElementById('predictor-select');
+	return selectEl.value;
+}
+
 async function takePhotoAndSayPrediction() {
 	const imgDataUrl = await getImageDataUrl();
+	const url = `/webcam?inference=${getObjectDetectorParam()}`;
 
-	const predictionResponse = await fetch('/webcam', {
+	const predictionResponse = await fetch(url, {
 		method: 'POST',
 		headers: {
 			Accept: 'application/json',

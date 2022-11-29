@@ -46,7 +46,11 @@ def predict_from_webcam():
   decoded = decode_base64_img(request.get_json())
   img = get_img_from_decoded(decoded)
 
-  prediction_name, confidence = get_yolo_predictions(yolo_model, img, 0)
+  if request.args.get('inference') == "yolo":
+    prediction_name, confidence = get_yolo_predictions(yolo_model, img, 0)
+  else:
+    prediction_name, confidence = get_detectron_prediction(detectron_predictor, img, categories)
+
 
   return jsonify(f'{prediction_name} with confidence of {confidence} percent')
 
