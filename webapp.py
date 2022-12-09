@@ -15,6 +15,8 @@ app = Flask(__name__)
 
 yolo_model = get_yolo_model()
 detectron_predictor = get_detectron_predictor()
+caution_items = ['car', 'bus', 'traffic light', 'stop sign', 'knife', 'couch']
+caution_switch = False
 
 
 @app.route('/', methods=['GET'])
@@ -52,8 +54,10 @@ def predict_from_webcam():
     prediction_name, confidence = get_detectron_prediction(detectron_predictor, img, categories)
 
 
-  return jsonify(f'{prediction_name} with confidence of {confidence} percent')
-
+  if prediction_name in caution_items:
+    return jsonify(f'Caution! {prediction_name} with confidence of {confidence} percent')
+  else:
+    return jsonify(f'{prediction_name} with confidence of {confidence} percent')
 
 
 if __name__ == "__main__":
